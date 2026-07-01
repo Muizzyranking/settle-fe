@@ -1,0 +1,12 @@
+export { DevStrip } from "./dev-strip";
+export { FeatureSection } from "./feature-section";
+export { Features } from "./features";
+export { Footer } from "./footer";
+export { Hero } from "./hero";
+export { HowItWorks } from "./how-it-works";
+export { Nav } from "./nav";
+export { NombaTrust } from "./nomba-trust";
+export { NotifyVisual } from "./notify-visual";
+export { ReconcileVisual } from "./reconcile-visual";
+export { Reveal } from "./reveal";
+export { TrustStrip } from "./trust-strip";
