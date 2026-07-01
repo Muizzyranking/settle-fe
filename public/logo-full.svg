@@ -1,0 +1,7 @@
+<svg width="216" height="56" viewBox="0 0 216 56" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Settle">
+  <g transform="translate(-4,-5) scale(0.875)">
+    <rect x="4" y="8" width="38" height="38" rx="9" fill="#D4E9DF"/>
+    <path d="M22,18 H50 A10,10 0 0 1 60,28 V56 A10,10 0 0 1 50,66 H22 A10,10 0 0 1 12,56 V28 A10,10 0 0 1 22,18 Z M52,22 A5,5 0 1 0 52,32 A5,5 0 1 0 52,22 Z" fill-rule="evenodd" fill="#1F6F54"/>
+  </g>
+  <text x="62" y="38" font-family="Fraunces, 'Iowan Old Style', Georgia, serif" font-size="32" font-weight="480" letter-spacing="-0.5" fill="#0E3B2E">Settle</text>
+</svg>
