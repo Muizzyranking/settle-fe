@@ -195,6 +195,32 @@ html[data-theme="dark"] ::-moz-selection {
   color: #06110D;
 }
 
+.theme-toggle-icon-current-light,
+.theme-toggle-icon-current-dark {
+  display: none;
+}
+
+html[data-theme="light"] .theme-toggle-icon-current-light,
+html[data-theme="dark"] .theme-toggle-icon-current-dark {
+  display: inline-flex;
+}
+
+.theme-switch-track {
+  background-color: var(--color-surface-raised);
+}
+
+.theme-switch-thumb {
+  transform: translate(0.25rem, -50%);
+}
+
+html[data-theme="dark"] .theme-switch-track {
+  background-color: var(--color-primary);
+}
+
+html[data-theme="dark"] .theme-switch-thumb {
+  transform: translate(1.35rem, -50%);
+}
+
 /* ─────────────────────────────────────────────
    TYPOGRAPHY UTILITIES (used with @apply or directly)
 ───────────────────────────────────────────── */

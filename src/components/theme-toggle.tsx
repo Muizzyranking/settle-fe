@@ -1,30 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 type ThemeToggleVariant = "icon" | "switch";
 
 const STORAGE_KEY = "settle-theme";
+const THEME_CHANGE_EVENT = "settle-theme-change";
 
-function readTheme(): Theme {
+function isTheme(value: string | null): value is Theme {
+  return value === "light" || value === "dark";
+}
+
+function readStoredTheme(): Theme | null {
+  if (typeof window !== "undefined") {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (isTheme(stored)) {
+        return stored;
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
+}
+
+function readPreferredTheme(): Theme {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return "dark";
+  }
+
+  return "light";
+}
+
+function readSavedTheme(): Theme {
+  return readStoredTheme() ?? readPreferredTheme();
+}
+
+function readAppliedTheme(): Theme {
   if (typeof document !== "undefined") {
     const attr = document.documentElement.getAttribute("data-theme");
-    if (attr === "light" || attr === "dark") {
+    if (isTheme(attr)) {
       return attr;
     }
   }
 
-  if (typeof window !== "undefined") {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark") {
-      return stored;
-    }
+  return readSavedTheme();
+}
 
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+function setDocumentTheme(next: Theme) {
+  if (typeof document !== "undefined") {
+    document.documentElement.setAttribute("data-theme", next);
+    document.documentElement.style.colorScheme = next;
   }
-
-  return "light";
 }
 
 function SunIcon() {
@@ -62,16 +96,56 @@ export function ThemeToggle({
   variant?: ThemeToggleVariant;
   className?: string;
 }) {
-  const [theme, setTheme] = useState<Theme>(() => readTheme());
+  const [theme, setTheme] = useState<Theme>("light");
+
+  useEffect(() => {
+    const syncTheme = () => {
+      const next = readSavedTheme();
+      setDocumentTheme(next);
+      setTheme(next);
+    };
+
+    const syncAppliedTheme = () => {
+      setTheme(readAppliedTheme());
+    };
+
+    const syncSystemTheme = () => {
+      if (readStoredTheme() === null) {
+        syncTheme();
+      }
+    };
+
+    syncTheme();
+    window.addEventListener("storage", syncTheme);
+    window.addEventListener(THEME_CHANGE_EVENT, syncAppliedTheme);
+
+    const media =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia("(prefers-color-scheme: dark)")
+        : null;
+    media?.addEventListener("change", syncSystemTheme);
+
+    return () => {
+      window.removeEventListener("storage", syncTheme);
+      window.removeEventListener(THEME_CHANGE_EVENT, syncAppliedTheme);
+      media?.removeEventListener("change", syncSystemTheme);
+    };
+  }, []);
 
   const applyTheme = (next: Theme) => {
-    document.documentElement.setAttribute("data-theme", next);
-    window.localStorage.setItem(STORAGE_KEY, next);
+    setDocumentTheme(next);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // The DOM theme still changes even if browser storage is unavailable.
+    }
     setTheme(next);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
 
   const toggleTheme = () => {
-    applyTheme(theme === "dark" ? "light" : "dark");
+    const current = readAppliedTheme();
+    applyTheme(current === "dark" ? "light" : "dark");
   };
 
   if (variant === "switch") {
@@ -79,7 +153,7 @@ export function ThemeToggle({
       <button
         type="button"
         onClick={toggleTheme}
-        aria-label="Toggle dark mode"
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
         aria-pressed={theme === "dark"}
         suppressHydrationWarning
         className={`
@@ -93,17 +167,16 @@ export function ThemeToggle({
         <span className="text-base font-medium text-[var(--color-ink)]">Dark mode</span>
         <span
           className={`
+            theme-switch-track
             relative h-6 w-11 rounded-full border border-[var(--color-border)]
             transition-colors duration-200
-            ${theme === "dark" ? "bg-[var(--color-primary)]" : "bg-[var(--color-surface-raised)]"}
           `}
         >
           <span
             className={`
-              absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full
+              theme-switch-thumb absolute top-1/2 h-4 w-4 rounded-full
               bg-[var(--color-bg)] shadow-[var(--shadow-btn)]
               transition-transform duration-200
-              ${theme === "dark" ? "translate-x-[1.35rem]" : "translate-x-1"}
             `}
           />
         </span>
@@ -115,7 +188,7 @@ export function ThemeToggle({
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label="Toggle dark mode"
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       aria-pressed={theme === "dark"}
       suppressHydrationWarning
       className={`
@@ -126,7 +199,12 @@ export function ThemeToggle({
         ${className}
       `}
     >
-      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+      <span className="theme-toggle-icon-current-light">
+        <SunIcon />
+      </span>
+      <span className="theme-toggle-icon-current-dark">
+        <MoonIcon />
+      </span>
     </button>
   );
 }
