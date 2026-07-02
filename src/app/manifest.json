@@ -1,0 +1,64 @@
+{
+  "name": "Settle",
+  "short_name": "Settle",
+  "description": "Payment collection and bank transfer reconciliation for Nigerian SMEs.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#FAF6EC",
+  "theme_color": "#1F6F54",
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "en-NG",
+  "categories": ["business", "finance", "productivity"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log in",
+      "short_name": "Login",
+      "description": "Open your Settle workspace.",
+      "url": "/login",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Create account",
+      "short_name": "Register",
+      "description": "Register a business on Settle.",
+      "url": "/register",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
