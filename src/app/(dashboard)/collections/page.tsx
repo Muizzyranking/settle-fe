@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app/app-shell";
-import { getCollections, getTenantProfile } from "@/lib/settle/api";
+import { getCollections } from "@/lib/settle/api";
 import { formatNaira, formatNumber, percent } from "@/lib/settle/format";
 import type { CollectionSummary } from "@/lib/settle/types";
 
@@ -131,7 +130,7 @@ function CollectionCard({ collection }: { collection: CollectionSummary }) {
 }
 
 export default async function CollectionsPage() {
-  const [tenant, collections] = await Promise.all([getTenantProfile(), getCollections()]);
+  const collections = await getCollections();
   const totalExpected = collections.reduce(
     (sum, collection) => sum + collection.expected_amount * collection.total_accounts,
     0,
@@ -145,9 +144,8 @@ export default async function CollectionsPage() {
     0,
   );
   const recurringCount = collections.filter((collection) => collection.recurrence !== null).length;
-
   return (
-    <AppShell tenant={tenant} activeHref="/collections">
+    <>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-mono text-[var(--color-ink-faint)]">Collections</p>
@@ -159,12 +157,10 @@ export default async function CollectionsPage() {
             dedicated customer accounts.
           </p>
         </div>
-
         <Link href="/collections/new" className="btn-primary justify-center text-sm">
           New collection
         </Link>
       </div>
-
       <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           label="Total expected"
@@ -187,7 +183,6 @@ export default async function CollectionsPage() {
           detail="Collections with due-status tracking"
         />
       </div>
-
       <section className="mt-8">
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -202,13 +197,12 @@ export default async function CollectionsPage() {
             {formatNumber(collections.length)} showing
           </div>
         </div>
-
         <div className="grid gap-4">
           {collections.map((collection) => (
             <CollectionCard key={collection.id} collection={collection} />
           ))}
         </div>
       </section>
-    </AppShell>
+    </>
   );
 }

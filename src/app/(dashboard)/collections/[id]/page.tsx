@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app/app-shell";
 import { BackLink } from "@/components/app/back-link";
-import { getAccounts, getCollectionDetail, getTenantProfile } from "@/lib/settle/api";
+import { getAccounts, getCollectionDetail } from "@/lib/settle/api";
 import { formatDate, formatNaira, formatNumber, percent } from "@/lib/settle/format";
 import { getPaymentStatusMeta } from "@/lib/settle/status";
 import type { AccountSummary, CollectionSummary } from "@/lib/settle/types";
@@ -232,8 +231,7 @@ export default async function CollectionDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [tenant, collection, accounts] = await Promise.all([
-    getTenantProfile(),
+  const [collection, accounts] = await Promise.all([
     getCollectionDetail(id),
     getAccounts(id),
   ]);
@@ -242,7 +240,7 @@ export default async function CollectionDetailPage({
   const showDueColumn = collection.recurrence !== null;
 
   return (
-    <AppShell tenant={tenant} activeHref="/collections">
+    <>
       <div className="mb-6">
         <BackLink href="/collections" label="Back to collections" />
       </div>
@@ -369,6 +367,6 @@ export default async function CollectionDetailPage({
           </div>
         </aside>
       </div>
-    </AppShell>
+    </>
   );
 }

@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app/app-shell";
 import { BackLink } from "@/components/app/back-link";
-import { getTenantProfile } from "@/lib/settle/api";
 
 export const metadata = {
   title: "Developer docs",
@@ -26,14 +24,11 @@ const docs = [
 ];
 
 export default async function DevelopersPage() {
-  const tenant = await getTenantProfile();
-
   return (
-    <AppShell tenant={tenant} activeHref="/developers">
+    <>
       <div className="mb-6">
         <BackLink href="/dashboard" label="Back to overview" />
       </div>
-
       <div>
         <p className="text-mono text-[var(--color-ink-faint)]">Developers</p>
         <h1 className="mt-3 max-w-4xl text-display-lg text-[var(--color-heading)]">
@@ -43,7 +38,6 @@ export default async function DevelopersPage() {
           Use API keys, webhooks, and payment links when you are ready to integrate.
         </p>
       </div>
-
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {docs.map((doc) => (
           <Link
@@ -58,6 +52,6 @@ export default async function DevelopersPage() {
           </Link>
         ))}
       </div>
-    </AppShell>
+    </>
   );
 }

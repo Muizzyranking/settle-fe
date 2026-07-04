@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app/app-shell";
-import { getDashboardOverview, getTenantProfile } from "@/lib/settle/api";
+import { getDashboardOverview } from "@/lib/settle/api";
 import { formatDateTime, formatNaira, formatNumber, percent } from "@/lib/settle/format";
 import { getPaymentStatusMeta } from "@/lib/settle/status";
 import type {
@@ -224,14 +223,11 @@ function TransactionsTable({ transactions }: { transactions: DashboardTransactio
 }
 
 export default async function DashboardPage() {
-  const [tenant, dashboard] = await Promise.all([
-    getTenantProfile(),
-    getDashboardOverview(),
-  ]);
+  const dashboard = await getDashboardOverview();
   const attentionItems = dashboard.attention_items.filter((item) => item.href !== "/settings");
 
   return (
-    <AppShell tenant={tenant} activeHref="/dashboard">
+    <>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-mono text-[var(--color-ink-faint)]">Overview</p>
@@ -339,6 +335,6 @@ export default async function DashboardPage() {
         </div>
         <TransactionsTable transactions={dashboard.recent_transactions} />
       </section>
-    </AppShell>
+    </>
   );
 }

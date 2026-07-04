@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app/app-shell";
 import { BackLink } from "@/components/app/back-link";
-import { getNotifications, getTenantProfile } from "@/lib/settle/api";
+import { getNotifications } from "@/lib/settle/api";
 import { formatDateTime } from "@/lib/settle/format";
 
 export const metadata = {
@@ -9,17 +8,12 @@ export const metadata = {
 };
 
 export default async function NotificationsPage() {
-  const [tenant, notifications] = await Promise.all([
-    getTenantProfile(),
-    getNotifications(),
-  ]);
-
+  const notifications = await getNotifications();
   return (
-    <AppShell tenant={tenant} activeHref="/notifications">
+    <>
       <div className="mb-6">
         <BackLink href="/dashboard" label="Back to overview" />
       </div>
-
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-mono text-[var(--color-ink-faint)]">Notifications</p>
@@ -31,7 +25,6 @@ export default async function NotificationsPage() {
           </p>
         </div>
       </div>
-
       <div className="mt-8 grid gap-3">
         {notifications.map((notification) => (
           <article
@@ -58,7 +51,6 @@ export default async function NotificationsPage() {
                 {formatDateTime(notification.created_at)}
               </p>
             </div>
-
             {notification.data?.collection_id ? (
               <Link
                 href={`/collections/${notification.data.collection_id}`}
@@ -70,6 +62,6 @@ export default async function NotificationsPage() {
           </article>
         ))}
       </div>
-    </AppShell>
+    </>
   );
 }
