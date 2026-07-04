@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { type ReactNode, useState } from "react";
 import { Logo } from "@/components/logo/Logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { TenantProfile } from "@/lib/settle/types";
 
 type AppShellProps = {
-  activeHref: string;
   tenant: Pick<TenantProfile, "business_name" | "email">;
   children: ReactNode;
 };
@@ -157,6 +157,19 @@ function CollapseIcon({ className = iconClass }: IconProps) {
   );
 }
 
+function CloseIcon({ className = iconClass }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M6 6l12 12M18 6 6 18"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const navigation = [
   { label: "Home", desktopLabel: "Overview", href: "/dashboard", icon: OverviewIcon },
   { label: "Collections", desktopLabel: "Collections", href: "/collections", icon: CollectionsIcon },
@@ -165,9 +178,8 @@ const navigation = [
   { label: "Reports", desktopLabel: "Reports", href: "/reports", icon: ReportsIcon },
   { label: "Money", desktopLabel: "Finance", href: "/finance", icon: FinanceIcon },
   { label: "Settings", desktopLabel: "Settings", href: "/settings", icon: SettingsIcon },
+  { label: "Developers", desktopLabel: "Developer docs", href: "/developers", icon: DocsIcon },
 ];
-
-const mobileNavigation = navigation.slice(0, 5);
 
 function isActiveNavigationItem(href: string, activeHref: string) {
   if (href === "/dashboard") {
@@ -215,7 +227,7 @@ function DesktopNavigationLink({
       href={item.href}
       title={collapsed ? item.desktopLabel : undefined}
       className={`
-        flex min-h-11 items-center gap-3 rounded-[var(--radius-sm)] text-sm font-medium no-underline transition-colors
+        flex min-h-11 items-center gap-3 rounded-[var(--radius-sm)] text-sm font-medium no-underline
         ${collapsed ? "justify-center px-2" : "px-3"}
         ${
           isActive
@@ -225,18 +237,20 @@ function DesktopNavigationLink({
       `}
       aria-current={isActive ? "page" : undefined}
     >
-      <Icon />
-      <span className={collapsed ? "sr-only" : ""}>{item.desktopLabel}</span>
+      <Icon className="h-5 w-5 shrink-0" />
+      <span className={collapsed ? "sr-only" : "truncate"}>{item.desktopLabel}</span>
     </Link>
   );
 }
 
-function MobileNavigationLink({
+function DrawerNavigationLink({
   item,
   activeHref,
+  onNavigate,
 }: {
   item: (typeof navigation)[number];
   activeHref: string;
+  onNavigate: () => void;
 }) {
   const isActive = isActiveNavigationItem(item.href, activeHref);
   const Icon = item.icon;
@@ -244,40 +258,49 @@ function MobileNavigationLink({
   return (
     <Link
       href={item.href}
+      onClick={onNavigate}
       className={`
-        flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[var(--radius-sm)] px-1 py-2 text-[11px] font-medium no-underline transition-colors
+        flex min-h-11 items-center gap-3 rounded-[var(--radius-sm)] px-3 text-sm font-medium no-underline transition-colors
         ${
           isActive
-            ? "bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-[var(--color-primary)]"
-            : "text-[var(--color-ink-muted)]"
+            ? "bg-[var(--color-primary)] text-[var(--color-primary-contrast)]"
+            : "text-[var(--color-ink-muted)] hover:bg-[var(--color-bg-subtle)] hover:text-[var(--color-ink)]"
         }
       `}
       aria-current={isActive ? "page" : undefined}
     >
-      <Icon className="h-5 w-5 shrink-0" />
-      <span className="max-w-full truncate">{item.label}</span>
+      <Icon />
+      <span className="truncate">{item.desktopLabel}</span>
     </Link>
   );
 }
 
-export function AppShell({ activeHref, tenant, children }: AppShellProps) {
+export function AppShell({ tenant, children }: AppShellProps) {
+  const activeHref = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <main
       className={`
-        min-h-screen bg-[var(--color-bg)] pb-24 lg:pb-0
+        min-h-screen bg-[var(--color-bg)] transition-[padding-left] duration-200 ease-out
         ${collapsed ? "lg:pl-[5.5rem]" : "lg:pl-[17rem]"}
       `}
     >
+      {/* Desktop sidebar */}
       <aside
         className={`
-          fixed left-0 top-0 z-40 hidden h-screen border-r border-[var(--color-border)]
-          bg-[var(--color-surface-raised)] px-4 py-5 lg:flex lg:flex-col
+          fixed left-0 top-0 z-40 hidden h-screen overflow-hidden border-r border-[var(--color-border)]
+          bg-[var(--color-surface-raised)] px-4 py-5 transition-[width] duration-200 ease-out lg:flex lg:flex-col
           ${collapsed ? "w-[5.5rem]" : "w-[17rem]"}
         `}
       >
-        <div className={`flex items-center ${collapsed ? "justify-center" : "justify-between"}`}>
+        <div
+          className={`
+            flex items-center gap-2
+            ${collapsed ? "flex-col" : "justify-between"}
+          `}
+        >
           <Link href="/" aria-label="Settle home" className="min-w-0">
             <Logo
               variant={collapsed ? "mark" : "full"}
@@ -285,30 +308,16 @@ export function AppShell({ activeHref, tenant, children }: AppShellProps) {
               scheme="auto"
             />
           </Link>
-          {!collapsed ? (
-            <button
-              type="button"
-              onClick={() => setCollapsed(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)]"
-              aria-label="Collapse sidebar"
-              title="Collapse sidebar"
-            >
-              <CollapseIcon className="h-5 w-5" />
-            </button>
-          ) : null}
-        </div>
-
-        {collapsed ? (
           <button
             type="button"
-            onClick={() => setCollapsed(false)}
-            className="mt-5 flex h-10 w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)]"
-            aria-label="Expand sidebar"
-            title="Expand sidebar"
+            onClick={() => setCollapsed((value) => !value)}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)]"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <CollapseIcon className="h-5 w-5" />
           </button>
-        ) : null}
+        </div>
 
         {!collapsed ? (
           <div className="mt-6 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-bg-subtle)] p-3">
@@ -331,11 +340,71 @@ export function AppShell({ activeHref, tenant, children }: AppShellProps) {
         </nav>
       </aside>
 
+      {/* Mobile drawer + backdrop */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+        className={`
+          fixed inset-0 z-40 bg-black/50 transition-opacity duration-200 ease-out lg:hidden
+          ${mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}
+        `}
+      />
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation"
+        aria-hidden={!mobileOpen}
+        className={`
+          fixed left-0 top-0 z-50 flex h-screen w-[17rem] flex-col border-r border-[var(--color-border)]
+          bg-[var(--color-surface-raised)] px-4 py-5 transition-transform duration-200 ease-out lg:hidden
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <div className="flex items-center justify-between">
+          <Link href="/" aria-label="Settle home" onClick={() => setMobileOpen(false)}>
+            <Logo variant="full" size={28} scheme="auto" />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)]"
+            aria-label="Close menu"
+            title="Close menu"
+          >
+            <CloseIcon className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="mt-6 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-bg-subtle)] p-3">
+          <p className="truncate text-sm font-semibold text-[var(--color-ink)]">
+            {tenant.business_name}
+          </p>
+          <p className="mt-1 truncate text-xs text-[var(--color-ink-faint)]">{tenant.email}</p>
+        </div>
+
+        <nav aria-label="Dashboard sections" className="mt-6 grid gap-1 overflow-y-auto">
+          {navigation.map((item) => (
+            <DrawerNavigationLink
+              key={item.href}
+              item={item}
+              activeHref={activeHref}
+              onNavigate={() => setMobileOpen(false)}
+            />
+          ))}
+        </nav>
+      </aside>
+
       <header className="sticky top-0 z-30 border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface-raised)_94%,transparent)] backdrop-blur-xl">
         <div className="flex min-h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          <Link href="/" aria-label="Settle home" className="lg:hidden">
-            <Logo variant="mark" size={32} scheme="auto" />
-          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)] lg:hidden"
+            aria-label="Open menu"
+            title="Open menu"
+          >
+            <CollapseIcon className="h-5 w-5" />
+          </button>
 
           <div className="min-w-0 flex-1 lg:hidden">
             <p className="truncate text-sm font-semibold text-[var(--color-ink)]">
@@ -353,9 +422,6 @@ export function AppShell({ activeHref, tenant, children }: AppShellProps) {
               <BellIcon />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
             </ActionLink>
-            <ActionLink href="/developers" label="Developer docs">
-              <DocsIcon />
-            </ActionLink>
             <ThemeToggle />
           </div>
         </div>
@@ -364,17 +430,6 @@ export function AppShell({ activeHref, tenant, children }: AppShellProps) {
       <div className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <section className="mx-auto w-full max-w-[1180px]">{children}</section>
       </div>
-
-      <nav
-        aria-label="Primary app navigation"
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface-raised)_96%,transparent)] px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_34px_-28px_rgba(0,0,0,0.65)] backdrop-blur-xl lg:hidden"
-      >
-        <div className="mx-auto flex max-w-md gap-1">
-          {mobileNavigation.map((item) => (
-            <MobileNavigationLink key={item.href} item={item} activeHref={activeHref} />
-          ))}
-        </div>
-      </nav>
     </main>
   );
 }
