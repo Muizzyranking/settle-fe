@@ -38,7 +38,7 @@
       "name": "Log in",
       "short_name": "Login",
       "description": "Open your Settle workspace.",
-      "url": "/login",
+      "url": "/auth/login",
       "icons": [
         {
           "src": "/icon-192.png",
@@ -51,7 +51,7 @@
       "name": "Create account",
       "short_name": "Register",
       "description": "Register a business on Settle.",
-      "url": "/register",
+      "url": "/auth/register",
       "icons": [
         {
           "src": "/icon-192.png",
