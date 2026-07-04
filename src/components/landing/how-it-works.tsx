@@ -67,7 +67,7 @@ export function HowItWorks() {
         {/* CTA below steps */}
         <Reveal delay={0.2}>
           <div className="mt-12 text-center">
-            <Link href="/register" className="btn-primary text-[15px]">
+            <Link href="/auth/register" className="btn-primary text-[15px]">
               Create your free account
             </Link>
           </div>

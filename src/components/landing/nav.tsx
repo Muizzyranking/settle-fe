@@ -75,14 +75,14 @@ export function Nav() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-[var(--text-label)] font-medium text-[var(--color-ink)] opacity-70
                          hover:opacity-100 transition-opacity duration-200 no-underline min-h-[48px]
                          flex items-center"
             >
               Log in
             </Link>
-            <Link href="/register" className="btn-primary text-sm">
+            <Link href="/auth/register" className="btn-primary text-sm">
               Get started
             </Link>
           </div>
@@ -187,7 +187,7 @@ export function Nav() {
                 <div className="my-2 border-t border-[var(--color-border)]" />
 
                 <Link
-                  href="/login"
+                  href="/auth/login"
                   onClick={() => setDrawerOpen(false)}
                   className="
                     flex items-center px-4 py-4 rounded-[var(--radius-sm)]
@@ -204,7 +204,7 @@ export function Nav() {
               {/* CTA at bottom of drawer */}
               <div className="p-6 border-t border-[var(--color-border)]">
                 <Link
-                  href="/register"
+                  href="/auth/register"
                   className="btn-primary w-full justify-center text-base"
                   onClick={() => setDrawerOpen(false)}
                 >

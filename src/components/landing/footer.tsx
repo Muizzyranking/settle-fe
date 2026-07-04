@@ -16,9 +16,9 @@ const footerSections = [
   {
     title: "Account",
     links: [
-      ["Log in", "/login"],
-      ["Create account", "/register"],
-      ["Email verification", "/check-email"],
+      ["Log in", "/auth/login"],
+      ["Create account", "/auth/register"],
+      ["Email verification", "/auth/check-email"],
     ],
   },
 ];
@@ -40,11 +40,11 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/register" className="btn-primary justify-center text-sm">
+            <Link href="/auth/register" className="btn-primary justify-center text-sm">
               Create account
             </Link>
             <Link
-              href="/login"
+              href="/auth/login"
               className="
                 inline-flex min-h-12 items-center justify-center rounded-[var(--radius-btn)]
                 border border-[rgba(250,246,236,0.16)] px-5 text-sm font-medium

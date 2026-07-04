@@ -134,7 +134,7 @@ export function Hero() {
               transition={{ duration: 0.45, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col sm:flex-row sm:items-center gap-4"
             >
-              <Link href="/register" className="btn-primary text-[15px] w-full sm:w-auto justify-center">
+              <Link href="/auth/register" className="btn-primary text-[15px] w-full sm:w-auto justify-center">
                 Get started free
               </Link>
               <a href="#how-it-works" className="btn-ghost w-full sm:w-auto justify-center">
