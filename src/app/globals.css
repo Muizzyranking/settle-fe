@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap");
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────
@@ -7,118 +7,119 @@
    anywhere else in the codebase.
 ───────────────────────────────────────────── */
 @theme {
-
   /* ── Color palette ── */
 
   /* Emerald family */
-  --color-emerald-950: #07231A;
-  --color-emerald-900: #0E3B2E;
-  --color-emerald-800: #164F3E;
-  --color-emerald-700: #1A5E48;
-  --color-emerald-600: #1F6F54;
+  --color-emerald-950: #07231a;
+  --color-emerald-900: #0e3b2e;
+  --color-emerald-800: #164f3e;
+  --color-emerald-700: #1a5e48;
+  --color-emerald-600: #1f6f54;
   --color-emerald-500: #278060;
-  --color-emerald-400: #3DA07C;
-  --color-emerald-300: #6DC0A2;
-  --color-emerald-200: #A8DACC;
-  --color-emerald-100: #D4EDE5;
-  --color-emerald-50:  #EBF7F3;
+  --color-emerald-400: #3da07c;
+  --color-emerald-300: #6dc0a2;
+  --color-emerald-200: #a8dacc;
+  --color-emerald-100: #d4ede5;
+  --color-emerald-50: #ebf7f3;
 
   /* Sand family */
-  --color-sand-50:  #FAF6EC;
-  --color-sand-100: #F4EDD8;
-  --color-sand-200: #EFE4CC;
-  --color-sand-300: #E4D3B0;
-  --color-sand-400: #D4BC8C;
-  --color-sand-500: #BEA06A;
+  --color-sand-50: #faf6ec;
+  --color-sand-100: #f4edd8;
+  --color-sand-200: #efe4cc;
+  --color-sand-300: #e4d3b0;
+  --color-sand-400: #d4bc8c;
+  --color-sand-500: #bea06a;
 
   /* Clay (warm accent — use sparingly) */
-  --color-clay-600: #A84D1E;
-  --color-clay-500: #C2622D;
-  --color-clay-400: #D97C48;
-  --color-clay-200: #F0C4A4;
-  --color-clay-100: #FAE8D8;
+  --color-clay-600: #a84d1e;
+  --color-clay-500: #c2622d;
+  --color-clay-400: #d97c48;
+  --color-clay-200: #f0c4a4;
+  --color-clay-100: #fae8d8;
 
   /* Semantic aliases — use these in components, not raw palette */
-  --color-bg:                var(--color-sand-50);
-  --color-bg-subtle:         var(--color-sand-100);
-  --color-surface:           var(--color-sand-100);
-  --color-surface-raised:    #FFFDF7;
-  --color-ink:               #1C1B17;
-  --color-ink-muted:         rgba(28, 27, 23, 0.6);
-  --color-ink-faint:         rgba(28, 27, 23, 0.35);
-  --color-heading:           var(--color-emerald-900);
-  --color-heading-accent:    var(--color-emerald-600);
-  --color-primary:           var(--color-emerald-600);
-  --color-primary-hover:     var(--color-emerald-700);
-  --color-primary-dark:      var(--color-emerald-900);
-  --color-primary-contrast:  var(--color-sand-50);
-  --color-accent:            var(--color-clay-500);
-  --color-border:            rgba(14, 59, 46, 0.12);
-  --color-border-strong:     rgba(14, 59, 46, 0.18);
-  --color-error:             #B91C1C;
+  --color-bg: var(--color-sand-50);
+  --color-bg-subtle: var(--color-sand-100);
+  --color-surface: var(--color-sand-100);
+  --color-surface-raised: #fffdf7;
+  --color-ink: #1c1b17;
+  --color-ink-muted: rgba(28, 27, 23, 0.6);
+  --color-ink-faint: rgba(28, 27, 23, 0.35);
+  --color-heading: var(--color-emerald-900);
+  --color-heading-accent: var(--color-emerald-600);
+  --color-primary: var(--color-emerald-600);
+  --color-primary-hover: var(--color-emerald-700);
+  --color-primary-dark: var(--color-emerald-900);
+  --color-primary-contrast: var(--color-sand-50);
+  --color-accent: var(--color-clay-500);
+  --color-border: rgba(14, 59, 46, 0.12);
+  --color-border-strong: rgba(14, 59, 46, 0.18);
+  --color-error: #b91c1c;
 
   /* ── Typography ── */
   --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-body:    "General Sans", "Inter", system-ui, sans-serif;
-  --font-mono:    "IBM Plex Mono", "Fira Code", monospace;
+  --font-body: "General Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Fira Code", monospace;
 
   /* Type scale */
   --text-display-xl: clamp(2.5rem, 7vw, 4.5rem);
   --text-display-lg: clamp(2rem, 4.5vw, 3rem);
   --text-display-md: clamp(1.5rem, 3vw, 2.125rem);
-  --text-body-lg:    1.125rem;
-  --text-body:       1rem;
-  --text-label:      0.875rem;
-  --text-xs:         0.75rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-label: 0.875rem;
+  --text-xs: 0.75rem;
 
   --leading-display: 1.06;
-  --leading-tight:   1.2;
-  --leading-snug:    1.35;
-  --leading-body:    1.65;
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-body: 1.65;
 
   --tracking-display: 0em;
-  --tracking-tight:   0em;
-  --tracking-normal:  0em;
+  --tracking-tight: 0em;
+  --tracking-normal: 0em;
 
   /* Font weights */
-  --weight-display: 480;   /* Fraunces variable optical size */
-  --weight-medium:  500;
-  --weight-normal:  400;
+  --weight-display: 480; /* Fraunces variable optical size */
+  --weight-medium: 500;
+  --weight-normal: 400;
 
   /* ── Spacing ── */
-  --spacing-section-mobile:  4rem;     /* 64px — vertical rhythm between sections, mobile */
-  --spacing-section-desktop: 7.5rem;   /* 120px — desktop */
-  --spacing-container:       1.25rem;  /* mobile horizontal padding */
-  --spacing-container-lg:    2rem;     /* desktop horizontal padding */
+  --spacing-section-mobile: 4rem; /* 64px — vertical rhythm between sections, mobile */
+  --spacing-section-desktop: 7.5rem; /* 120px — desktop */
+  --spacing-container: 1.25rem; /* mobile horizontal padding */
+  --spacing-container-lg: 2rem; /* desktop horizontal padding */
 
   /* ── Borders & shape ── */
-  --radius-card:   0.5rem;
-  --radius-input:  0.5rem;
-  --radius-btn:    0.5rem;
-  --radius-pill:   100px;
-  --radius-sm:     0.5rem;
+  --radius-card: 0.5rem;
+  --radius-input: 0.5rem;
+  --radius-btn: 0.5rem;
+  --radius-pill: 100px;
+  --radius-sm: 0.5rem;
 
   /* ── Shadows ── */
   /* Warm-tinted, never cold gray — sits on sand backgrounds */
-  --shadow-card:    0 4px 24px -4px rgba(14, 59, 46, 0.10), 0 1px 4px rgba(14, 59, 46, 0.06);
-  --shadow-float:   0 12px 48px -8px rgba(14, 59, 46, 0.18), 0 4px 12px rgba(14, 59, 46, 0.08);
-  --shadow-btn:     0 1px 3px rgba(14, 59, 46, 0.20);
+  --shadow-card:
+    0 4px 24px -4px rgba(14, 59, 46, 0.1), 0 1px 4px rgba(14, 59, 46, 0.06);
+  --shadow-float:
+    0 12px 48px -8px rgba(14, 59, 46, 0.18), 0 4px 12px rgba(14, 59, 46, 0.08);
+  --shadow-btn: 0 1px 3px rgba(14, 59, 46, 0.2);
 
   /* ── Motion ── */
-  --duration-fast:   150ms;
-  --duration-base:   250ms;
-  --duration-slow:   400ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
   --duration-slower: 600ms;
-  --ease-out:        cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out:     cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* ── Z-index scale ── */
-  --z-below:   -1;
-  --z-base:     0;
-  --z-raised:   10;
-  --z-overlay:  40;
-  --z-nav:      50;
-  --z-modal:    60;
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-overlay: 40;
+  --z-nav: 50;
+  --z-modal: 60;
 }
 
 :root {
@@ -127,31 +128,37 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --color-bg:                #07130F;
-  --color-bg-subtle:         #0C1B16;
-  --color-surface:           #10241E;
-  --color-surface-raised:    #142B24;
-  --color-ink:               #F7F3E9;
-  --color-ink-muted:         rgba(247, 243, 233, 0.68);
-  --color-ink-faint:         rgba(247, 243, 233, 0.42);
-  --color-heading:           #F6FFF9;
-  --color-heading-accent:    #83D9B6;
-  --color-primary:           #83D9B6;
-  --color-primary-hover:     #A8DACC;
-  --color-primary-dark:      #D4EDE5;
-  --color-primary-contrast:  #06110D;
-  --color-accent:            #E4945D;
-  --color-border:            rgba(250, 246, 236, 0.13);
-  --color-border-strong:     rgba(250, 246, 236, 0.22);
-  --shadow-card:             0 18px 48px -30px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(250, 246, 236, 0.04);
-  --shadow-float:            0 28px 70px -34px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(250, 246, 236, 0.05);
-  --shadow-btn:              0 1px 0 rgba(250, 246, 236, 0.10), 0 14px 28px -20px rgba(131, 217, 182, 0.55);
+  --color-bg: #07130f;
+  --color-bg-subtle: #0c1b16;
+  --color-surface: #10241e;
+  --color-surface-raised: #142b24;
+  --color-ink: #f7f3e9;
+  --color-ink-muted: rgba(247, 243, 233, 0.68);
+  --color-ink-faint: rgba(247, 243, 233, 0.42);
+  --color-heading: #f6fff9;
+  --color-heading-accent: #83d9b6;
+  --color-primary: #83d9b6;
+  --color-primary-hover: #a8dacc;
+  --color-primary-dark: #d4ede5;
+  --color-primary-contrast: #06110d;
+  --color-accent: #e4945d;
+  --color-border: rgba(250, 246, 236, 0.13);
+  --color-border-strong: rgba(250, 246, 236, 0.22);
+  --shadow-card:
+    0 18px 48px -30px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(250, 246, 236, 0.04);
+  --shadow-float:
+    0 28px 70px -34px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(250, 246, 236, 0.05);
+  --shadow-btn:
+    0 1px 0 rgba(250, 246, 236, 0.1), 0 14px 28px -20px
+    rgba(131, 217, 182, 0.55);
 }
 
 /* ─────────────────────────────────────────────
    BASE STYLES
 ───────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -166,7 +173,9 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -187,12 +196,12 @@ body {
 
 html[data-theme="dark"] ::selection {
   background: color-mix(in srgb, var(--color-primary) 76%, var(--color-accent));
-  color: #06110D;
+  color: #06110d;
 }
 
 html[data-theme="dark"] ::-moz-selection {
   background: color-mix(in srgb, var(--color-primary) 76%, var(--color-accent));
-  color: #06110D;
+  color: #06110d;
 }
 
 .theme-toggle-icon-current-light,
@@ -309,9 +318,10 @@ html[data-theme="dark"] .theme-switch-thumb {
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color var(--duration-base) var(--ease-out),
-              box-shadow var(--duration-base) var(--ease-out),
-              transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
   box-shadow: var(--shadow-btn);
   min-height: 48px;
   white-space: nowrap;
@@ -344,8 +354,9 @@ html[data-theme="dark"] .theme-switch-thumb {
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 3px;
-  transition: text-decoration-color var(--duration-base) var(--ease-out),
-              color var(--duration-base) var(--ease-out);
+  transition:
+    text-decoration-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
   cursor: pointer;
   background: none;
   border: none;
@@ -393,12 +404,15 @@ html[data-theme="dark"] .theme-switch-thumb {
   font-size: var(--text-body);
   color: var(--color-ink);
   outline: none;
-  transition: border-color var(--duration-fast) var(--ease-out),
-              box-shadow var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
   min-height: 48px;
 }
 
-.input::placeholder { color: var(--color-ink-faint); }
+.input::placeholder {
+  color: var(--color-ink-faint);
+}
 
 .input:focus {
   border-color: var(--color-primary);
@@ -409,7 +423,11 @@ html[data-theme="dark"] .theme-switch-thumb {
    ACCOUNT CARD (the signature element)
 ───────────────────────────────────────────── */
 .account-card {
-  background: linear-gradient(145deg, var(--color-emerald-700) 0%, var(--color-emerald-900) 100%);
+  background: linear-gradient(
+    145deg,
+    var(--color-emerald-700) 0%,
+    var(--color-emerald-900) 100%
+  );
   border-radius: 1.25rem;
   padding: 1.5rem;
   box-shadow: var(--shadow-float);
@@ -418,13 +436,17 @@ html[data-theme="dark"] .theme-switch-thumb {
   color: var(--color-sand-50);
   /* subtle security-paper texture */
   background-image:
-    linear-gradient(145deg, var(--color-emerald-700) 0%, var(--color-emerald-900) 100%),
+    linear-gradient(
+      145deg,
+      var(--color-emerald-700) 0%,
+      var(--color-emerald-900) 100%
+    ),
     repeating-linear-gradient(
       -45deg,
       transparent,
       transparent 3px,
-      rgba(250,246,236,0.025) 3px,
-      rgba(250,246,236,0.025) 4px
+      rgba(250, 246, 236, 0.025) 3px,
+      rgba(250, 246, 236, 0.025) 4px
     );
   background-blend-mode: normal;
 }
@@ -432,10 +454,19 @@ html[data-theme="dark"] .theme-switch-thumb {
 /* ─────────────────────────────────────────────
    SCROLLBAR (subtle, matches palette)
 ───────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-bg); }
-::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
+}
 
 /* ─────────────────────────────────────────────
    FOCUS RING (global, accessible)
@@ -446,8 +477,7 @@ html[data-theme="dark"] .theme-switch-thumb {
 }
 
 /* ─────────────────────────────────────────────
-   GOOGLE FONTS IMPORT (via next/font in layout.tsx,
-   but keeping the @font-face comment as reference)
+   FONT STACKS
 
    Fraunces:      wght 100-900, ital, SOFT axis
    IBM Plex Mono: 400, 500
