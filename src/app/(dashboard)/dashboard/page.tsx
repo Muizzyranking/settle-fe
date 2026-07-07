@@ -244,7 +244,7 @@ export default async function DashboardPage() {
             New collection
           </Link>
           <Link
-            href="/accounts"
+            href="/accounts/new"
             className="inline-flex min-h-12 items-center justify-center rounded-[var(--radius-btn)] border border-[var(--color-border)] px-5 text-sm font-medium text-[var(--color-ink)] no-underline transition-colors hover:bg-[var(--color-bg-subtle)]"
           >
             Add account
