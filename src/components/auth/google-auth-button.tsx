@@ -39,6 +39,7 @@ export function GoogleAuthButton({
         rounded-[var(--radius-btn)] border border-[var(--color-border)]
         bg-[var(--color-surface)] px-5 text-sm font-medium text-[var(--color-ink)]
         transition-colors hover:bg-[var(--color-bg-subtle)]
+        cursor-pointer
       "
     >
       <GoogleIcon />
