@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AuthSwitchLink } from "@/components/auth/auth-form";
 import { GoogleAuthButton } from "@/components/auth/google-auth-button";
+import { EyeIcon, EyeSlashIcon } from "@/components/icons";
+import { Field, PasswordStrengthMeter } from "./components";
 
 const registerSchema = z
   .object({
@@ -15,7 +17,7 @@ const registerSchema = z
       .trim()
       .min(2, "Enter your business name.")
       .max(120, "Business name is too long."),
-    email: z.string().trim().email("Enter a valid email address."),
+    email: z.email("Enter a valid email address."),
     first_name: z.string().trim().max(80, "First name is too long.").optional(),
     last_name: z.string().trim().max(80, "Last name is too long.").optional(),
     phone_number: z
@@ -39,108 +41,11 @@ const registerSchema = z
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-type PasswordStrength = {
-  score: number;
-  label: string;
-  className: string;
-  checks: Array<{ label: string; passed: boolean }>;
-};
-
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">{label}</span>
-      {children}
-      {error ? (
-        <span className="mt-2 block text-xs font-medium text-[var(--color-error)]">
-          {error}
-        </span>
-      ) : null}
-    </label>
-  );
-}
-
-function getPasswordStrength(password: string): PasswordStrength {
-  const checks = [
-    { label: "8+ characters", passed: password.length >= 8 },
-    { label: "Uppercase letter", passed: /[A-Z]/.test(password) },
-    { label: "Lowercase letter", passed: /[a-z]/.test(password) },
-    { label: "Number", passed: /\d/.test(password) },
-    { label: "Symbol", passed: /[^A-Za-z0-9]/.test(password) },
-  ];
-  const score = checks.filter((check) => check.passed).length;
-
-  if (score <= 2) {
-    return {
-      score,
-      checks,
-      label: "Weak",
-      className: "bg-[#B91C1C]",
-    };
-  }
-
-  if (score <= 4) {
-    return {
-      score,
-      checks,
-      label: "Good",
-      className: "bg-[#BEA06A]",
-    };
-  }
-
-  return {
-    score,
-    checks,
-    label: "Strong",
-    className: "bg-[var(--color-primary)]",
-  };
-}
-
-function PasswordStrengthMeter({ password }: { password: string }) {
-  const strength = getPasswordStrength(password);
-  const width = password.length === 0 ? 0 : (strength.score / 5) * 100;
-
-  return (
-    <div className="mt-3 rounded-[var(--radius-sm)] bg-[var(--color-bg-subtle)] px-4 py-3">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-medium text-[var(--color-ink-muted)]">Password strength</p>
-        <p className="text-xs font-semibold text-[var(--color-ink)]">{strength.label}</p>
-      </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-[var(--color-border)]">
-        <div
-          className={`h-full rounded-full transition-all duration-200 ${strength.className}`}
-          style={{ width: `${width}%` }}
-        />
-      </div>
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        {strength.checks.map((check) => (
-          <span
-            key={check.label}
-            className={`
-              text-[11px] font-medium
-              ${check.passed ? "text-[var(--color-primary)]" : "text-[var(--color-ink-faint)]"}
-            `}
-          >
-            {check.passed ? "OK " : ""}
-            {check.label}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function RegisterForm() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const {
     register,
     handleSubmit,
@@ -159,18 +64,37 @@ export function RegisterForm() {
     },
   });
   const password = watch("password");
+  const confirmPassword = watch("confirm_password") ?? "";
+  const passwordsMatch =
+    password === confirmPassword && confirmPassword.length > 0;
 
   const onSubmit = async (values: RegisterFormValues) => {
     setMessage(null);
 
-    // Visualization-only for now. This mirrors the payload shape for
-    // POST /v1/auth/register and keeps tokens out of browser storage.
+    const response = await fetch("/api/auth/register", {
+      body: JSON.stringify(values),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      const detail = data?.detail ?? data?.error;
+
+      setMessage(
+        typeof detail === "string"
+          ? detail
+          : "Could not create that account. Try again.",
+      );
+      return;
+    }
+
     const params = new URLSearchParams({ email: values.email });
     router.push(`/auth/check-email?${params.toString()}`);
   };
 
   const startGoogleAuth = () => {
-    setMessage("Google auth will redirect through the backend when auth is wired.");
+    window.location.href = "/api/auth/google";
   };
 
   return (
@@ -179,13 +103,20 @@ export function RegisterForm() {
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-[var(--color-border)]" />
-        <span className="text-xs font-medium text-[var(--color-ink-faint)]">or</span>
+        <span className="text-xs font-medium text-[var(--color-ink-faint)]">
+          or
+        </span>
         <div className="h-px flex-1 bg-[var(--color-border)]" />
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Field label="Business name" error={errors.business_name?.message}>
+        <Field
+          id="register-business-name"
+          label="Business name"
+          error={errors.business_name?.message}
+        >
           <input
+            id="register-business-name"
             className="input"
             placeholder="Sunshine Estates"
             autoComplete="organization"
@@ -193,8 +124,13 @@ export function RegisterForm() {
           />
         </Field>
 
-        <Field label="Email address" error={errors.email?.message}>
+        <Field
+          id="register-email"
+          label="Email address"
+          error={errors.email?.message}
+        >
           <input
+            id="register-email"
             className="input"
             type="email"
             placeholder="you@business.com"
@@ -204,16 +140,26 @@ export function RegisterForm() {
         </Field>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="First name" error={errors.first_name?.message}>
+          <Field
+            id="register-first-name"
+            label="First name"
+            error={errors.first_name?.message}
+          >
             <input
+              id="register-first-name"
               className="input"
               placeholder="Chidi"
               autoComplete="given-name"
               {...register("first_name")}
             />
           </Field>
-          <Field label="Last name" error={errors.last_name?.message}>
+          <Field
+            id="register-last-name"
+            label="Last name"
+            error={errors.last_name?.message}
+          >
             <input
+              id="register-last-name"
               className="input"
               placeholder="Okeke"
               autoComplete="family-name"
@@ -222,8 +168,13 @@ export function RegisterForm() {
           </Field>
         </div>
 
-        <Field label="Phone number" error={errors.phone_number?.message}>
+        <Field
+          id="register-phone-number"
+          label="Phone number"
+          error={errors.phone_number?.message}
+        >
           <input
+            id="register-phone-number"
             className="input"
             type="tel"
             placeholder="08012345678"
@@ -232,25 +183,73 @@ export function RegisterForm() {
           />
         </Field>
 
-        <Field label="Password" error={errors.password?.message}>
-          <input
-            className="input"
-            type="password"
-            placeholder="Create a strong password"
-            autoComplete="new-password"
-            {...register("password")}
-          />
+        <Field
+          id="register-password"
+          label="Password"
+          error={errors.password?.message}
+        >
+          <div className="relative">
+            <input
+              id="register-password"
+              className="input pr-10"
+              type={showPassword ? "text" : "password"}
+              placeholder="Create a strong password"
+              autoComplete="new-password"
+              {...register("password")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-5 w-5" />
+              ) : (
+                <EyeIcon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
           <PasswordStrengthMeter password={password} />
         </Field>
 
-        <Field label="Confirm password" error={errors.confirm_password?.message}>
-          <input
-            className="input"
-            type="password"
-            placeholder="Repeat your password"
-            autoComplete="new-password"
-            {...register("confirm_password")}
-          />
+        <Field
+          id="register-confirm-password"
+          label="Confirm password"
+          error={errors.confirm_password?.message}
+        >
+          <div className="relative">
+            <input
+              id="register-confirm-password"
+              className="input pr-10"
+              type={showConfirm ? "text" : "password"}
+              placeholder="Repeat your password"
+              autoComplete="new-password"
+              {...register("confirm_password")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
+              aria-label={showConfirm ? "Hide password" : "Show password"}
+              tabIndex={-1}
+            >
+              {showConfirm ? (
+                <EyeSlashIcon className="h-5 w-5" />
+              ) : (
+                <EyeIcon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+
+          {confirmPassword.length > 0 && (
+            <p
+              className={`mt-2 text-xs font-medium ${passwordsMatch ? "text-[var(--color-primary)]" : "text-[var(--color-error)]"}`}
+            >
+              {passwordsMatch ? "Passwords match" : "Passwords do not match"}
+            </p>
+          )}
         </Field>
 
         {message ? (
@@ -268,7 +267,11 @@ export function RegisterForm() {
         </button>
       </form>
 
-      <AuthSwitchLink prompt="Already have an account?" href="/auth/login" label="Log in" />
+      <AuthSwitchLink
+        prompt="Already have an account?"
+        href="/auth/login"
+        label="Log in"
+      />
     </>
   );
 }

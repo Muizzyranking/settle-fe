@@ -8,38 +8,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AuthSwitchLink } from "@/components/auth/auth-form";
 import { GoogleAuthButton } from "@/components/auth/google-auth-button";
+import { EyeIcon, EyeSlashIcon } from "@/components/icons";
+import { Field } from "./components";
 
 const loginSchema = z.object({
-  email: z.string().trim().email("Enter a valid email address."),
+  email: z.email("Enter a valid email address."),
   password: z.string().min(1, "Enter your password."),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">{label}</span>
-      {children}
-      {error ? (
-        <span className="mt-2 block text-xs font-medium text-[var(--color-error)]">
-          {error}
-        </span>
-      ) : null}
-    </label>
-  );
-}
-
 export function LoginForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const {
     register,
@@ -53,13 +34,35 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: LoginFormValues) => {
     setMessage(null);
+
+    const response = await fetch("/api/auth/login", {
+      body: JSON.stringify(values),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      const detail = data?.detail ?? data?.error;
+
+      setMessage(
+        response.status === 403
+          ? "Verify your email before logging in. Use the link sent to your inbox."
+          : typeof detail === "string"
+            ? detail
+            : "Could not log in with those details.",
+      );
+      return;
+    }
+
     router.push("/dashboard");
+    router.refresh();
   };
 
   const startGoogleAuth = () => {
-    setMessage("Google auth will exchange a one-time code when auth is wired.");
+    window.location.href = "/api/auth/google";
   };
 
   return (
@@ -68,13 +71,20 @@ export function LoginForm() {
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-[var(--color-border)]" />
-        <span className="text-xs font-medium text-[var(--color-ink-faint)]">or</span>
+        <span className="text-xs font-medium text-[var(--color-ink-faint)]">
+          or
+        </span>
         <div className="h-px flex-1 bg-[var(--color-border)]" />
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Field label="Email address" error={errors.email?.message}>
+        <Field
+          id="login-email"
+          label="Email address"
+          error={errors.email?.message}
+        >
           <input
+            id="login-email"
             className="input"
             type="email"
             placeholder="you@business.com"
@@ -83,14 +93,35 @@ export function LoginForm() {
           />
         </Field>
 
-        <Field label="Password" error={errors.password?.message}>
-          <input
-            className="input"
-            type="password"
-            placeholder="Enter your password"
-            autoComplete="current-password"
-            {...register("password")}
-          />
+        <Field
+          id="login-password"
+          label="Password"
+          error={errors.password?.message}
+        >
+          <div className="relative">
+            <input
+              id="login-password"
+              className="input"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              {...register("password")}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-5 w-5" />
+              ) : (
+                <EyeIcon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </Field>
 
         <div className="flex items-center justify-between gap-4">
@@ -124,7 +155,11 @@ export function LoginForm() {
         </button>
       </form>
 
-      <AuthSwitchLink prompt="New to Settle?" href="/auth/register" label="Create an account" />
+      <AuthSwitchLink
+        prompt="New to Settle?"
+        href="/auth/register"
+        label="Create an account"
+      />
     </>
   );
 }
