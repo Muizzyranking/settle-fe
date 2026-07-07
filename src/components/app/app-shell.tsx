@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { LogoutIcon } from "@/components/icons";
 import { Logo } from "@/components/logo/Logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { TenantProfile } from "@/lib/settle/types";
@@ -20,7 +21,12 @@ const iconClass = "h-5 w-5";
 
 function OverviewIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M4 13.5 12 6l8 7.5V20a1 1 0 0 1-1 1h-5v-5h-4v5H5a1 1 0 0 1-1-1v-6.5Z"
         stroke="currentColor"
@@ -34,7 +40,12 @@ function OverviewIcon({ className = iconClass }: IconProps) {
 
 function CollectionsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M7 6.5h10M7 12h10M7 17.5h6M5 3.5h14a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"
         stroke="currentColor"
@@ -48,7 +59,12 @@ function CollectionsIcon({ className = iconClass }: IconProps) {
 
 function AccountsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M16 19v-1.5A3.5 3.5 0 0 0 12.5 14h-5A3.5 3.5 0 0 0 4 17.5V19M14 5.3a3.6 3.6 0 1 1 0 5.4M10 5.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7ZM20 19v-1.2a3.2 3.2 0 0 0-2.4-3.1"
         stroke="currentColor"
@@ -62,7 +78,12 @@ function AccountsIcon({ className = iconClass }: IconProps) {
 
 function TransactionsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M7 8h10M7 12h10M7 16h6M5 3.5h14a1 1 0 0 1 1 1v15.2l-2.5-1.3-2.5 1.3-2.5-1.3-2.5 1.3-2.5-1.3L4 19.7V4.5a1 1 0 0 1 1-1Z"
         stroke="currentColor"
@@ -76,7 +97,12 @@ function TransactionsIcon({ className = iconClass }: IconProps) {
 
 function ReportsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M5 19V5M5 19h14M9 16v-5M13 16V8M17 16v-8"
         stroke="currentColor"
@@ -90,7 +116,12 @@ function ReportsIcon({ className = iconClass }: IconProps) {
 
 function FinanceIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M4 8.5h16M6 6h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2ZM8 15h3"
         stroke="currentColor"
@@ -104,7 +135,12 @@ function FinanceIcon({ className = iconClass }: IconProps) {
 
 function SettingsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2a2 2 0 0 1-4 0V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 0 1 4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H2.8a2 2 0 0 1 0-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7A2 2 0 0 1 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8a2 2 0 0 1 4 0V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 0 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2a2 2 0 0 1 0 4H21a1.7 1.7 0 0 0-1.6 1Z"
         stroke="currentColor"
@@ -118,7 +154,12 @@ function SettingsIcon({ className = iconClass }: IconProps) {
 
 function BellIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M18 9.8A6 6 0 0 0 6 9.8c0 7-2.2 7.2-2.2 7.2h16.4S18 16.8 18 9.8ZM9.8 20a2.4 2.4 0 0 0 4.4 0"
         stroke="currentColor"
@@ -132,7 +173,12 @@ function BellIcon({ className = iconClass }: IconProps) {
 
 function DocsIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M8 7 4 12l4 5M16 7l4 5-4 5M13.5 5.5l-3 13"
         stroke="currentColor"
@@ -146,7 +192,12 @@ function DocsIcon({ className = iconClass }: IconProps) {
 
 function CollapseIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M4 6h16M4 12h10M4 18h16"
         stroke="currentColor"
@@ -159,7 +210,12 @@ function CollapseIcon({ className = iconClass }: IconProps) {
 
 function CloseIcon({ className = iconClass }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
       <path
         d="M6 6l12 12M18 6 6 18"
         stroke="currentColor"
@@ -171,14 +227,54 @@ function CloseIcon({ className = iconClass }: IconProps) {
 }
 
 const navigation = [
-  { label: "Home", desktopLabel: "Overview", href: "/dashboard", icon: OverviewIcon },
-  { label: "Collections", desktopLabel: "Collections", href: "/collections", icon: CollectionsIcon },
-  { label: "Accounts", desktopLabel: "Accounts", href: "/accounts", icon: AccountsIcon },
-  { label: "Activity", desktopLabel: "Transactions", href: "/transactions", icon: TransactionsIcon },
-  { label: "Reports", desktopLabel: "Reports", href: "/reports", icon: ReportsIcon },
-  { label: "Money", desktopLabel: "Finance", href: "/finance", icon: FinanceIcon },
-  { label: "Settings", desktopLabel: "Settings", href: "/settings", icon: SettingsIcon },
-  { label: "Developers", desktopLabel: "Developer docs", href: "/developers", icon: DocsIcon },
+  {
+    label: "Home",
+    desktopLabel: "Overview",
+    href: "/dashboard",
+    icon: OverviewIcon,
+  },
+  {
+    label: "Collections",
+    desktopLabel: "Collections",
+    href: "/collections",
+    icon: CollectionsIcon,
+  },
+  {
+    label: "Accounts",
+    desktopLabel: "Accounts",
+    href: "/accounts",
+    icon: AccountsIcon,
+  },
+  {
+    label: "Activity",
+    desktopLabel: "Transactions",
+    href: "/transactions",
+    icon: TransactionsIcon,
+  },
+  {
+    label: "Reports",
+    desktopLabel: "Reports",
+    href: "/reports",
+    icon: ReportsIcon,
+  },
+  {
+    label: "Money",
+    desktopLabel: "Finance",
+    href: "/finance",
+    icon: FinanceIcon,
+  },
+  {
+    label: "Settings",
+    desktopLabel: "Settings",
+    href: "/settings",
+    icon: SettingsIcon,
+  },
+  {
+    label: "Developers",
+    desktopLabel: "Developer docs",
+    href: "/developers",
+    icon: DocsIcon,
+  },
 ];
 
 function isActiveNavigationItem(href: string, activeHref: string) {
@@ -238,7 +334,9 @@ function DesktopNavigationLink({
       aria-current={isActive ? "page" : undefined}
     >
       <Icon className="h-5 w-5 shrink-0" />
-      <span className={collapsed ? "sr-only" : "truncate"}>{item.desktopLabel}</span>
+      <span className={collapsed ? "sr-only" : "truncate"}>
+        {item.desktopLabel}
+      </span>
     </Link>
   );
 }
@@ -277,8 +375,28 @@ function DrawerNavigationLink({
 
 export function AppShell({ tenant, children }: AppShellProps) {
   const activeHref = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false); // ← add loading state
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      const res = await fetch("/api/auth/logout", { method: "POST" });
+      if (res.ok) {
+        router.push("/"); // landing page
+        router.refresh(); // optional: clear RSC cache / re-check auth
+      } else {
+        console.error("Logout failed:", res.status);
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <main
@@ -324,7 +442,9 @@ export function AppShell({ tenant, children }: AppShellProps) {
             <p className="truncate text-sm font-semibold text-[var(--color-ink)]">
               {tenant.business_name}
             </p>
-            <p className="mt-1 truncate text-xs text-[var(--color-ink-faint)]">{tenant.email}</p>
+            <p className="mt-1 truncate text-xs text-[var(--color-ink-faint)]">
+              {tenant.email}
+            </p>
           </div>
         ) : null}
 
@@ -361,7 +481,11 @@ export function AppShell({ tenant, children }: AppShellProps) {
         `}
       >
         <div className="flex items-center justify-between">
-          <Link href="/" aria-label="Settle home" onClick={() => setMobileOpen(false)}>
+          <Link
+            href="/"
+            aria-label="Settle home"
+            onClick={() => setMobileOpen(false)}
+          >
             <Logo variant="full" size={28} scheme="auto" />
           </Link>
           <button
@@ -379,10 +503,15 @@ export function AppShell({ tenant, children }: AppShellProps) {
           <p className="truncate text-sm font-semibold text-[var(--color-ink)]">
             {tenant.business_name}
           </p>
-          <p className="mt-1 truncate text-xs text-[var(--color-ink-faint)]">{tenant.email}</p>
+          <p className="mt-1 truncate text-xs text-[var(--color-ink-faint)]">
+            {tenant.email}
+          </p>
         </div>
 
-        <nav aria-label="Dashboard sections" className="mt-6 grid gap-1 overflow-y-auto">
+        <nav
+          aria-label="Dashboard sections"
+          className="mt-6 grid gap-1 overflow-y-auto"
+        >
           {navigation.map((item) => (
             <DrawerNavigationLink
               key={item.href}
@@ -410,11 +539,15 @@ export function AppShell({ tenant, children }: AppShellProps) {
             <p className="truncate text-sm font-semibold text-[var(--color-ink)]">
               {tenant.business_name}
             </p>
-            <p className="truncate text-xs text-[var(--color-ink-faint)]">{tenant.email}</p>
+            <p className="truncate text-xs text-[var(--color-ink-faint)]">
+              {tenant.email}
+            </p>
           </div>
 
           <div className="hidden min-w-0 flex-1 lg:block">
-            <p className="text-sm font-semibold text-[var(--color-ink)]">{tenant.business_name}</p>
+            <p className="text-sm font-semibold text-[var(--color-ink)]">
+              {tenant.business_name}
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -423,6 +556,20 @@ export function AppShell({ tenant, children }: AppShellProps) {
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
             </ActionLink>
             <ThemeToggle />
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              aria-label="Log out"
+              title="Log out"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-bg-subtle)] disabled:opacity-50 cursor-pointer"
+            >
+              {isLoggingOut ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-ink-faint)] border-t-[var(--color-accent)]" />
+              ) : (
+                <LogoutIcon />
+              )}
+            </button>
           </div>
         </div>
       </header>
