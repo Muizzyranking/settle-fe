@@ -17,8 +17,8 @@ export default async function NewCollectionPage() {
           Define what customers should pay.
         </h1>
         <p className="mt-4 max-w-[62ch] text-sm leading-relaxed text-[var(--color-ink-muted)]">
-          Create the payment group first. Account provisioning and bulk import will attach
-          customers to this collection in the next phase.
+          Create the payment group first. Customer accounts can then be provisioned under
+          this collection for tracking.
         </p>
       </div>
       <NewCollectionForm />
