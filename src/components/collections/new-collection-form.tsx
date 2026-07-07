@@ -7,7 +7,11 @@ import { formatNaira } from "@/lib/settle/format";
 
 type RecurrenceOption = "none" | "weekly" | "monthly" | "custom";
 
-const recurrenceOptions: Array<{ value: RecurrenceOption; label: string; detail: string }> = [
+const recurrenceOptions: Array<{
+  value: RecurrenceOption;
+  label: string;
+  detail: string;
+}> = [
   { value: "none", label: "One-time", detail: "No due cycle" },
   { value: "weekly", label: "Weekly", detail: "Every week" },
   { value: "monthly", label: "Monthly", detail: "Every month" },
@@ -24,14 +28,23 @@ function parseCurrency(value: string) {
   return normalized;
 }
 
+function FieldHint({ required = false }: { required?: boolean }) {
+  return (
+    <span className="ml-2 text-xs font-medium text-[var(--color-ink-faint)]">
+      {required ? "Required" : "Optional"}
+    </span>
+  );
+}
+
 export function NewCollectionForm() {
   const router = useRouter();
-  const [name, setName] = useState("August Rent 2026");
-  const [description, setDescription] = useState("Monthly rent for active tenants.");
-  const [expectedAmount, setExpectedAmount] = useState("45000");
-  const [recurrence, setRecurrence] = useState<RecurrenceOption>("monthly");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [expectedAmount, setExpectedAmount] = useState("");
+  const [recurrence, setRecurrence] = useState<RecurrenceOption>("none");
   const [intervalDays, setIntervalDays] = useState("14");
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const amount = useMemo(() => parseCurrency(expectedAmount), [expectedAmount]);
   const recurrenceLabel =
@@ -41,19 +54,65 @@ export function NewCollectionForm() {
         ? `Every ${intervalDays || "0"} days`
         : `${recurrence[0].toUpperCase()}${recurrence.slice(1)} collection`;
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
     setIsSaving(true);
-    router.push("/collections");
+
+    const payload = {
+      description: description.trim() || undefined,
+      expected_amount: amount > 0 ? amount : undefined,
+      name: name.trim(),
+      recurrence:
+        recurrence === "none"
+          ? undefined
+          : {
+              frequency: recurrence,
+              interval_days:
+                recurrence === "custom" ? Number(intervalDays) : null,
+            },
+    };
+    const response = await fetch("/api/settle/collections", {
+      body: JSON.stringify(payload),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+    const data = await response.json().catch(() => null);
+
+    setIsSaving(false);
+
+    if (!response.ok) {
+      const detail = data?.detail ?? data?.error;
+
+      if (response.status === 401 || detail === "session_expired") {
+        router.push("/auth/login?error=session_expired");
+        router.refresh();
+        return;
+      }
+
+      setError(
+        typeof detail === "string" ? detail : "Could not create collection.",
+      );
+      return;
+    }
+
+    const collectionId = data?.id ?? data?.collection?.id;
+
+    router.push(collectionId ? `/collections/${collectionId}` : "/collections");
+    router.refresh();
   };
 
   return (
-    <form className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]" onSubmit={onSubmit}>
+    <form
+      className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]"
+      onSubmit={onSubmit}
+    >
       <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5 shadow-[var(--shadow-card)] sm:p-6">
         <div className="grid gap-5">
           <label className="block">
             <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">
               Collection name
+              <FieldHint required />
             </span>
             <input
               className="input"
@@ -67,6 +126,7 @@ export function NewCollectionForm() {
           <label className="block">
             <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">
               Description
+              <FieldHint />
             </span>
             <textarea
               className="input min-h-28 resize-y py-3"
@@ -79,6 +139,7 @@ export function NewCollectionForm() {
           <label className="block">
             <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">
               Expected amount
+              <FieldHint />
             </span>
             <input
               className="input"
@@ -86,13 +147,13 @@ export function NewCollectionForm() {
               value={expectedAmount}
               onChange={(event) => setExpectedAmount(event.target.value)}
               placeholder="45000"
-              required
             />
           </label>
 
           <fieldset>
             <legend className="mb-3 text-sm font-medium text-[var(--color-ink)]">
               Recurrence
+              <FieldHint />
             </legend>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {recurrenceOptions.map((option) => {
@@ -134,6 +195,7 @@ export function NewCollectionForm() {
             <label className="block max-w-xs">
               <span className="mb-2 block text-sm font-medium text-[var(--color-ink)]">
                 Interval days
+                <FieldHint required />
               </span>
               <input
                 className="input"
@@ -148,9 +210,16 @@ export function NewCollectionForm() {
         </div>
 
         <div className="mt-7 flex flex-col gap-3 border-t border-[var(--color-border)] pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-[var(--color-ink-muted)]">
-            You can add customer accounts after creating the collection.
-          </p>
+          <div>
+            <p className="text-sm text-[var(--color-ink-muted)]">
+              You can add customer accounts after creating the collection.
+            </p>
+            {error ? (
+              <p className="mt-2 text-sm font-medium text-[var(--color-error)]">
+                {error}
+              </p>
+            ) : null}
+          </div>
           <button
             type="submit"
             disabled={isSaving}
@@ -180,7 +249,9 @@ export function NewCollectionForm() {
               </p>
             </div>
             <div className="rounded-[var(--radius-sm)] bg-[var(--color-bg-subtle)] p-4">
-              <p className="text-xs font-medium text-[var(--color-ink-faint)]">Schedule</p>
+              <p className="text-xs font-medium text-[var(--color-ink-faint)]">
+                Schedule
+              </p>
               <p className="mt-2 text-sm font-semibold text-[var(--color-ink)]">
                 {recurrenceLabel}
               </p>
@@ -193,7 +264,8 @@ export function NewCollectionForm() {
             Account provisioning comes next
           </p>
           <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-            After a collection exists, accounts can be created one by one or imported in bulk.
+            After a collection exists, create customer accounts under it for
+            payment tracking.
           </p>
         </div>
       </aside>
