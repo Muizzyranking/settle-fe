@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = "https://settle.ng";
@@ -8,20 +7,6 @@ const siteDescription =
   "Give every customer their own bank account number. Settle matches every transfer, updates their balance, and tells you the moment it lands. No spreadsheet required.";
 const socialDescription =
   "One account per customer. Every payment tracked, reconciled, and notified automatically.";
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -94,7 +79,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Settle - Get paid without the spreadsheet",
-    description: "One account per customer. Every payment tracked automatically.",
+    description:
+      "One account per customer. Every payment tracked automatically.",
     images: [
       {
         url: "/og-square.png",
@@ -144,15 +130,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      data-theme="light"
-      suppressHydrationWarning
-      className={[fraunces.variable, ibmPlexMono.variable]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Static theme bootstrap prevents a light/dark flash before hydration. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>{children}</body>
