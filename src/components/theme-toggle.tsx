@@ -161,6 +161,7 @@ export function ThemeToggle({
           border border-[var(--color-border)] bg-[var(--color-surface)]
           px-4 py-4 text-left transition-colors duration-200
           hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-raised)]
+          cursor-pointer
           ${className}
         `}
       >
@@ -196,6 +197,7 @@ export function ThemeToggle({
         border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)]
         transition-colors duration-200 hover:border-[var(--color-border-strong)]
         hover:bg-[var(--color-surface-raised)]
+        cursor-pointer
         ${className}
       `}
     >
