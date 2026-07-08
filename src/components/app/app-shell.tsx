@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { LogoutIcon } from "@/components/icons";
 import { Logo } from "@/components/logo/Logo";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -11,6 +11,7 @@ import type { TenantProfile } from "@/lib/settle/types";
 type AppShellProps = {
   tenant: Pick<TenantProfile, "business_name" | "email">;
   children: ReactNode;
+  unreadCount?: number;
 };
 
 type IconProps = {
@@ -271,7 +272,7 @@ const navigation = [
   },
   {
     label: "Developers",
-    desktopLabel: "Developer docs",
+    desktopLabel: "Coming soon",
     href: "/developers",
     icon: DocsIcon,
   },
@@ -373,12 +374,42 @@ function DrawerNavigationLink({
   );
 }
 
-export function AppShell({ tenant, children }: AppShellProps) {
+export function AppShell({
+  tenant,
+  children,
+  unreadCount = 0,
+}: AppShellProps) {
   const activeHref = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false); // ← add loading state
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [toast, setToast] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
+
+  /* SSE listener for real-time notification toasts */
+  useEffect(() => {
+    const eventSource = new EventSource("/api/notifications/stream");
+
+    eventSource.addEventListener("notification", (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        setToast({
+          title: data.title ?? "New notification",
+          message: data.message ?? "",
+        });
+        setTimeout(() => setToast(null), 5000);
+      } catch {
+        /* ignore malformed events */
+      }
+    });
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const handleLogout = async () => {
     if (isLoggingOut) return;
@@ -553,7 +584,11 @@ export function AppShell({ tenant, children }: AppShellProps) {
           <div className="flex items-center gap-2">
             <ActionLink href="/notifications" label="Notifications">
               <BellIcon />
-              <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+              {unreadCount > 0 ? (
+                <span className="absolute right-1.5 top-1.5 flex min-h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent)] px-1 text-[10px] font-bold text-white">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              ) : null}
             </ActionLink>
             <ThemeToggle />
             <button
@@ -577,6 +612,39 @@ export function AppShell({ tenant, children }: AppShellProps) {
       <div className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <section className="mx-auto w-full max-w-[1180px]">{children}</section>
       </div>
+
+      {/* Toast for SSE notifications */}
+      {toast ? (
+        <div
+          role="alert"
+          className="fixed bottom-6 right-6 z-[var(--z-modal)] max-w-sm animate-in rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4 shadow-[var(--shadow-float)]"
+        >
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-primary)]">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M6 4v3M6 8.5v.5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-[var(--color-ink)]">{toast.title}</p>
+              {toast.message ? (
+                <p className="mt-1 text-xs text-[var(--color-ink-muted)] line-clamp-2">
+                  {toast.message}
+                </p>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              className="flex h-5 w-5 items-center justify-center rounded-full text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
+            >
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
