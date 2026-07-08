@@ -109,11 +109,11 @@ export function Hero() {
               transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-display-xl text-[var(--color-heading)] mb-6"
             >
-              Get paid
+              Collect payments
               <br />
               <em className="not-italic text-[var(--color-heading-accent)]">without</em>
               <br />
-              the spreadsheet.
+              the guesswork.
             </motion.h1>
 
             {/* Subhead */}
@@ -123,8 +123,9 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="text-body-lg text-[var(--color-ink-muted)] mb-10 max-w-[44ch]"
             >
-              Give every customer their own bank account number. Settle matches every
-              transfer, updates their balance, and tells you the moment it lands.
+              Give every customer their own bank account number. When they transfer money,
+              Settle automatically matches the payment, updates their balance, and notifies
+              you — no manual checking, no spreadsheets, no guessing who paid.
             </motion.p>
 
             {/* CTAs */}

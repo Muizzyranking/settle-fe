@@ -14,7 +14,7 @@ export function TrustStrip() {
           "
         >
           <p className="text-label text-[var(--color-ink-muted)] italic" style={{ fontFamily: "var(--font-display)" }}>
-            Built for how Nigerian SMEs already collect money
+            Payment collection infrastructure for Nigerian SMEs
           </p>
           <div className="flex items-center gap-6 sm:gap-8 text-mono text-[var(--color-ink-muted)]">
             {[

@@ -9,10 +9,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 const NAV_LINKS = [
   { label: "Product", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Developers", href: "#developers" },
+  { label: "Coming soon", href: "#developers" },
 ];
 
-export function Nav() {
+export function Nav({ isAuthenticated = false }: { isAuthenticated?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -74,21 +74,33 @@ export function Nav() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <Link
-              href="/auth/login"
-              className="text-[var(--text-label)] font-medium text-[var(--color-ink)] opacity-70
-                         hover:opacity-100 transition-opacity duration-200 no-underline min-h-[48px]
-                         flex items-center"
-            >
-              Log in
-            </Link>
-            <Link href="/auth/register" className="btn-primary text-sm">
-              Get started
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="btn-primary text-sm"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="text-[var(--text-label)] font-medium text-[var(--color-ink)] opacity-70
+                             hover:opacity-100 transition-opacity duration-200 no-underline min-h-[48px]
+                             flex items-center"
+                >
+                  Log in
+                </Link>
+                <Link href="/auth/register" className="btn-primary text-sm">
+                  Get started
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
           <button
+            type="button"
             className="md:hidden flex flex-col justify-center items-center gap-1.5
                        w-12 h-12 rounded-[var(--radius-sm)] -mr-2
                        focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
@@ -152,6 +164,7 @@ export function Nav() {
               <div className="flex items-center justify-between px-6 h-16 border-b border-[var(--color-border)]">
                 <Logo variant="full" size={24} scheme="auto" />
                 <button
+                  type="button"
                   onClick={() => setDrawerOpen(false)}
                   className="w-10 h-10 flex items-center justify-center rounded-[var(--radius-sm)]
                              text-[var(--color-ink)] opacity-60 hover:opacity-100"
@@ -186,30 +199,42 @@ export function Nav() {
                 {/* Divider */}
                 <div className="my-2 border-t border-[var(--color-border)]" />
 
-                <Link
-                  href="/auth/login"
-                  onClick={() => setDrawerOpen(false)}
-                  className="
-                    flex items-center px-4 py-4 rounded-[var(--radius-sm)]
-                    text-[var(--color-ink)] font-medium text-base no-underline
-                    hover:bg-[var(--color-bg-subtle)] transition-colors duration-150
-                  "
-                >
-                  Log in
-                </Link>
+                {!isAuthenticated ? (
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setDrawerOpen(false)}
+                    className="
+                      flex items-center px-4 py-4 rounded-[var(--radius-sm)]
+                      text-[var(--color-ink)] font-medium text-base no-underline
+                      hover:bg-[var(--color-bg-subtle)] transition-colors duration-150
+                    "
+                  >
+                    Log in
+                  </Link>
+                ) : null}
 
                 <ThemeToggle variant="switch" className="mt-1 border-0 bg-transparent hover:bg-[var(--color-bg-subtle)]" />
               </nav>
 
               {/* CTA at bottom of drawer */}
               <div className="p-6 border-t border-[var(--color-border)]">
-                <Link
-                  href="/auth/register"
-                  className="btn-primary w-full justify-center text-base"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  Get started free
-                </Link>
+                {isAuthenticated ? (
+                  <Link
+                    href="/dashboard"
+                    className="btn-primary w-full justify-center text-base"
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    href="/auth/register"
+                    className="btn-primary w-full justify-center text-base"
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    Get started free
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>

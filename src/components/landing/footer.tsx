@@ -10,7 +10,7 @@ const footerSections = [
     links: [
       ["Features", "#features"],
       ["How it works", "#how-it-works"],
-      ["Developers", "#developers"],
+      ["Coming soon", "#developers"],
     ],
   },
   {

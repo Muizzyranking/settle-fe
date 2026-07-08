@@ -11,10 +11,10 @@ export function Features() {
       {/* 01 — Collect */}
       <FeatureSection
         index="01"
-        headline="One account, one customer, every time."
-        body="Each customer gets their own bank account number — permanent, dedicated, uniquely theirs.
-              When they pay, you know exactly who it was, what it was for, and whether
-              it matched what they owe. No sorting through nameless credit alerts."
+        headline="Every customer gets their own bank account."
+        body="Settle generates a unique Nomba virtual account number for each customer. When they
+              transfer money from any bank app, the payment lands in your business account but
+              Settle knows exactly who sent it — no more squinting at credit alerts."
         visual={
           <div className="relative w-full max-w-xs mx-auto py-6">
             {/* Stacked cards effect */}
@@ -59,10 +59,10 @@ export function Features() {
       {/* 02 — Reconcile */}
       <FeatureSection
         index="02"
-        headline="No more guessing whose transfer this was."
-        body="Every inbound payment is matched to the right customer automatically. Overpaid,
-              underpaid, or exact — Settle knows the difference and records it. No end-of-day
-              manual matching, no cross-referencing a bank app."
+        headline="Automatic reconciliation — no manual work."
+        body="Every inbound transfer is instantly matched to the correct customer and payment
+              record. Overpaid, underpaid, or exact — Settle flags the difference and updates
+              their balance. No end-of-day matching, no cross-referencing statements."
         visual={<ReconcileVisual />}
         flip
       />
@@ -70,10 +70,10 @@ export function Features() {
       {/* 03 — Notify */}
       <FeatureSection
         index="03"
-        headline="Know the moment it lands."
-        body="The second a payment hits, you get a notification — in the app, by email, or
-              forwarded to your own system. No refreshing. No checking the bank app.
-              Just money in, confirmation out."
+        headline="Real-time notifications when money arrives."
+        body="The moment a payment is confirmed, you get notified in-app and by email. Your
+              customer's payment page updates live too — so everyone knows the status without
+              asking. No refreshing, no checking the bank app."
         visual={<NotifyVisual />}
       />
     </div>

@@ -7,18 +7,18 @@ export function HowItWorks() {
   const steps = [
     {
       n: "1",
-      title: "Add your customers.",
-      body: "Name, phone, what they owe — a minute per person, or upload a list all at once.",
+      title: "Create a collection & add customers.",
+      body: "Set up a payment purpose (e.g. 'June Rent'), add your customers with their amounts. Each person gets a dedicated Nomba account number automatically.",
     },
     {
       n: "2",
-      title: "Share their payment page.",
-      body: "Each customer gets one link with their account number on it. Send it once, they save it.",
+      title: "Share their unique account number.",
+      body: "Each customer gets a payment page with their own bank account number. Send the link once — they save it and pay via their bank app whenever they're ready.",
     },
     {
       n: "3",
-      title: "Watch it come in.",
-      body: "Every payment shows up reconciled, with the customer's name attached — no spreadsheet required.",
+      title: "Payments reconcile themselves.",
+      body: "When money hits any account, Settle matches it to the right customer, deducts fees, and updates their balance in real time. You see exactly who has paid and who hasn't.",
     },
   ];
 
@@ -31,7 +31,7 @@ export function HowItWorks() {
         <Reveal>
           <p className="text-mono text-[var(--color-ink-faint)] mb-3">How it works</p>
           <h2 className="text-display-lg text-[var(--color-heading)] mb-12 max-w-[22ch]">
-            Three steps, then it runs itself.
+            Three steps to never chase payments again.
           </h2>
         </Reveal>
 
