@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BankSelect } from "@/components/bank-select";
 import { formatNaira } from "@/lib/settle/format";
 import type { RefundCandidate } from "@/lib/settle/types";
-import { BankSelect } from "@/components/bank-select";
 
 type BankInfo = {
   code: string;
