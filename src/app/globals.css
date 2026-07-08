@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────
@@ -58,7 +58,7 @@
 
   /* ── Typography ── */
   --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --font-body: "General Sans", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", "General Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "Fira Code", monospace;
 
   /* Type scale */
