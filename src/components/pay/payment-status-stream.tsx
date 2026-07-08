@@ -149,17 +149,35 @@ export function PaymentStatusStream({
 
   return (
     <section
-      className={`rounded-[var(--radius-card)] border p-5 shadow-[var(--shadow-card)] transition-colors ${copy.className}`}
+      className={`rounded-[var(--radius-card)] border p-6 shadow-[var(--shadow-card)] transition-all ${copy.className}`}
       aria-live="polite"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold">{copy.title}</p>
-          <p className="mt-2 text-sm leading-relaxed opacity-80">{copy.detail}</p>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          {status === "unpaid" ? (
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-bg-subtle)]">
+              <span className="h-3 w-3 rounded-full bg-[var(--color-ink-faint)] animate-pulse" />
+            </span>
+          ) : (
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-primary)]">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8.5L6 11.5L13 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-semibold">{copy.title}</p>
+            <p className="mt-1 text-sm leading-relaxed opacity-80">{copy.detail}</p>
+          </div>
         </div>
-        <span className="inline-flex w-fit rounded-full border border-current/20 px-3 py-1 text-xs font-medium">
-          {connected ? "Listening" : streamError ? "Reconnecting" : "Updated"}
-        </span>
+        <div className="flex items-center gap-2 border-t border-current/10 pt-3 text-xs font-medium">
+          <span
+            className={`inline-block h-1.5 w-1.5 rounded-full ${
+              connected ? "bg-[var(--color-primary)] animate-pulse" : streamError ? "bg-[var(--color-accent)]" : "bg-[var(--color-ink-faint)]"
+            }`}
+          />
+          {connected ? "Waiting for payment" : streamError ? "Reconnecting..." : "Updated"}
+        </div>
       </div>
     </section>
   );
