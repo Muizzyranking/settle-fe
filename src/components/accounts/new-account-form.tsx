@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState } from "react";
 import { formatNaira } from "@/lib/settle/format";
 import type { CollectionSummary } from "@/lib/settle/types";
+import { friendlyError } from "@/lib/settle/errors";
 
 type NewAccountFormProps = {
   collections: CollectionSummary[];
@@ -107,9 +108,7 @@ export function NewAccountForm({
       setError(
         response.status === 409
           ? "A customer with this reference already exists."
-          : typeof detail === "string"
-            ? detail
-            : "Could not provision account. Please try again.",
+          : friendlyError(detail),
       );
       return;
     }

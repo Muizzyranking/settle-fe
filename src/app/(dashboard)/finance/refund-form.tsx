@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BankSelect } from "@/components/bank-select";
+import { friendlyError } from "@/lib/settle/errors";
 import { formatNaira } from "@/lib/settle/format";
 import type { RefundCandidate } from "@/lib/settle/types";
 
@@ -85,7 +86,7 @@ export function RefundForm({
       setResolvedName(data.account_name ?? "Verified");
     } else {
       const err = await response.json().catch(() => null);
-      setError(err?.detail ?? "Could not verify account.");
+      setError(friendlyError(err?.detail ?? "Could not verify account."));
     }
 
     setVerifying(false);

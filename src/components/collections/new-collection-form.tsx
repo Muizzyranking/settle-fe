@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
 import { formatNaira } from "@/lib/settle/format";
+import { friendlyError } from "@/lib/settle/errors";
 
 type RecurrenceOption = "none" | "weekly" | "monthly" | "custom";
 
@@ -90,9 +91,7 @@ export function NewCollectionForm() {
         return;
       }
 
-      setError(
-        typeof detail === "string" ? detail : "Could not create collection.",
-      );
+      setError(friendlyError(detail));
       return;
     }
 

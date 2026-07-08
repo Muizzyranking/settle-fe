@@ -9,6 +9,7 @@ import { AuthSwitchLink } from "@/components/auth/auth-form";
 import { GoogleAuthButton } from "@/components/auth/google-auth-button";
 import { EyeIcon, EyeSlashIcon } from "@/components/icons";
 import { Field, PasswordStrengthMeter } from "./components";
+import { friendlyError } from "@/lib/settle/errors";
 
 const registerSchema = z
   .object({
@@ -81,11 +82,7 @@ export function RegisterForm() {
       const data = await response.json().catch(() => null);
       const detail = data?.detail ?? data?.error;
 
-      setMessage(
-        typeof detail === "string"
-          ? detail
-          : "Could not create that account. Try again.",
-      );
+      setMessage(friendlyError(detail));
       return;
     }
 

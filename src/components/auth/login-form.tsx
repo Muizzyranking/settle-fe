@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AuthSwitchLink } from "@/components/auth/auth-form";
 import { GoogleAuthButton } from "@/components/auth/google-auth-button";
+import { friendlyError } from "@/lib/settle/errors";
 import { EyeIcon, EyeSlashIcon } from "@/components/icons";
 import { Field } from "./components";
 
@@ -50,9 +51,7 @@ export function LoginForm() {
       setMessage(
         response.status === 403
           ? "Verify your email before logging in. Use the link sent to your inbox."
-          : typeof detail === "string"
-            ? detail
-            : "Could not log in with those details.",
+          : friendlyError(detail),
       );
       return;
     }

@@ -1,8 +1,10 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { friendlyError } from "@/lib/settle/errors";
 
 type DeleteAccountButtonProps = {
   accountId: string;
@@ -33,9 +35,7 @@ export function DeleteAccountButton({
       const data = await response.json().catch(() => null);
       const detail = data?.detail ?? data?.error;
 
-      setError(
-        typeof detail === "string" ? detail : "Could not delete this account.",
-      );
+      setError(friendlyError(detail));
       return;
     }
 

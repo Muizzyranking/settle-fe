@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { SavedBankAccount } from "@/lib/settle/types";
 import { BankSelect } from "@/components/bank-select";
+import { friendlyError } from "@/lib/settle/errors";
+import type { SavedBankAccount } from "@/lib/settle/types";
 
 type BankInfo = {
   code: string;
@@ -179,7 +180,7 @@ function AddBankAccountButton({
       setResolvedName(data.account_name ?? "Verified");
     } else {
       const err = await response.json().catch(() => null);
-      setError(err?.detail ?? "Could not verify account.");
+      setError(friendlyError(err?.detail ?? "Could not verify account."));
     }
 
     setVerifying(false);
@@ -208,7 +209,7 @@ function AddBankAccountButton({
       onAdded();
     } else {
       const err = await response.json().catch(() => null);
-      setError(err?.detail ?? "Could not save bank account.");
+      setError(friendlyError(err?.detail ?? "Could not save bank account."));
     }
 
     setSaving(false);
